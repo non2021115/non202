@@ -1,0 +1,42 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import numpy as np
+
+# Set the font to 'Malgun Gothic'
+font_path = 'C:\\Windows\\Fonts\\malgun.ttf'
+font_prop = fm.FontProperties(fname=font_path)
+plt.rcParams['font.family'] = 'Malgun Gothic'
+# Read the Excel file
+df = pd.read_excel("C:\\Users\\정시형\\OneDrive\\바탕 화면\\python workspace\\2번 자료.xlsx")
+
+# Extract the relevant columns and remove the unnecessary columns and rows
+desired_categories = ['사랑채_마당중심', '사랑채_건물중심', '사랑채_없음']
+filtered_df = df[df['Category'].isin(desired_categories)]
+filtered_df1 = filtered_df.replace(desired_categories, 0)
+filtered_df1 = filtered_df1.drop(labels='Category', axis = 1)
+
+# Count the occurrences of each category
+category_counts = filtered_df['Category'].value_counts()
+print(filtered_df1)
+values = filtered_df1.values
+labels = category_counts.index
+
+print(values)
+values = np.array(values)
+values = np.ravel(values, order = 'C')
+print(values)
+plt.pie(values, labels=labels, autopct='%1.1f%%')
+total_count = sum(values)
+# Add a title
+plt.title('사랑채', fontproperties=font_prop)
+
+# Add count information to the labels
+label_with_count = [f"{label} ({value}/{total_count})" for label, value in zip(labels, values)]
+plt.legend(label_with_count, prop=font_prop)
+
+# Set the font for tick labels
+
+
+# Display the chart
+plt.show()
